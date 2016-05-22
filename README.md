@@ -116,6 +116,15 @@ Most aspects of your cluster setup can be customized with environment variables.
  - **NODE_CPUS** sets the number of vCPUs to be used by node VMs.
 
    Defaults to **1**.
+
+ - **DOCKER_CONFIG_JSON** sets the location of your private docker repositories (and keys) configuration from the .docker/config.json file. This this is only usable if you set **USE_DOCKERCFG=true**. This is the newer docker configuration file used for its private registry configs and will be used as preference over the **DOCKERCFG** config file.
+
+   Defaults to "**~/.docker/config.json**".
+
+   You can create/update a *~/.docker/config.json* file at any time
+   by running `docker login <registry>.<domain>`. All nodes will get it automatically,
+   at 'vagrant up', given any modification or update to that file.
+
  - **DOCKERCFG** sets the location of your private docker repositories (and keys) configuration. However, this is only usable if you set **USE_DOCKERCFG=true**.
 
    Defaults to "**~/.dockercfg**".
@@ -123,6 +132,7 @@ Most aspects of your cluster setup can be customized with environment variables.
    You can create/update a *~/.dockercfg* file at any time
    by running `docker login <registry>.<domain>`. All nodes will get it automatically,
    at 'vagrant up', given any modification or update to that file.
+
 
  - **DOCKER_OPTIONS** sets the additional `DOCKER_OPTS` for docker service on both master and the nodes. Useful for adding params such as `--insecure-registry`.
 

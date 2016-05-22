@@ -62,6 +62,7 @@ CERTS_SCRIPT = File.join(File.dirname(__FILE__), "make-certs.sh")
 
 USE_DOCKERCFG = ENV['USE_DOCKERCFG'] || false
 DOCKERCFG = File.expand_path(ENV['DOCKERCFG'] || "~/.dockercfg")
+DOCKER_CONFIG_JSON = File.expand_path(ENV['DOCKER_CONFIG_JSON'] || "~/.docker/config.json")
 
 DOCKER_OPTIONS = ENV['DOCKER_OPTIONS'] || ''
 
@@ -474,13 +475,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
       end
 
-      if USE_DOCKERCFG && File.exist?(DOCKERCFG)
-        kHost.vm.provision :file, run: "always",
-         :source => "#{DOCKERCFG}", :destination => "/home/core/.dockercfg"
+      if USE_DOCKERCFG
+        # Docker config as json takes preference over .dockercfg
+        if File.exist?(DOCKER_CONFIG_JSON)
+          kHost.vm.provision :file, run: "always",
+           :source => "#{DOCKER_CONFIG_JSON}", :destination => "/home/core/.docker/config.json"
 
-        kHost.vm.provision :shell, run: "always" do |s|
-          s.inline = "cp /home/core/.dockercfg /root/.dockercfg"
-          s.privileged = true
+          kHost.vm.provision :shell, run: "always" do |s|
+            s.inline = "mkdir -p  /root/.docker/ && cp /home/core/.docker/config.json /root/.docker/config.json"
+            s.privileged = true
+          end
+        
+        elsif File.exist?(DOCKERCFG)
+          kHost.vm.provision :file, run: "always",
+           :source => "#{DOCKERCFG}", :destination => "/home/core/.dockercfg"
+
+          kHost.vm.provision :shell, run: "always" do |s|
+            s.inline = "cp /home/core/.dockercfg /root/.dockercfg"
+            s.privileged = true
+          end
         end
       end
 
