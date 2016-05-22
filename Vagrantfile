@@ -105,6 +105,7 @@ SERIAL_LOGGING = (ENV['SERIAL_LOGGING'].to_s.downcase == 'true')
 GUI = (ENV['GUI'].to_s.downcase == 'true')
 USE_KUBE_UI = ENV['USE_KUBE_UI'] || false
 SYNC_FOLDERS = ENV['SYNC_FOLDERS'] || false
+SYNC_FOLDERS_YAML = ENV['SYNC_FOLDERS_YAML'] || 'synced_folders.yaml'
 
 BOX_TIMEOUT_COUNT = ENV['BOX_TIMEOUT_COUNT'] || 50
 
@@ -125,7 +126,7 @@ Object.redefine_const(:CLOUD_PROVIDER,
 
 if SYNC_FOLDERS
   # Read YAML file with mountpoint details
-  MOUNT_POINTS = YAML::load_file('synced_folders.yaml')
+  MOUNT_POINTS = YAML::load_file(SYNC_FOLDERS_YAML)
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|

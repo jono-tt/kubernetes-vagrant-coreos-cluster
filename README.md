@@ -153,6 +153,9 @@ Most aspects of your cluster setup can be customized with environment variables.
 
    Defaults to `false`
 
+ - **SYNC_FOLDERS_YAML** defines the yaml config file to use for sync folders. Only used if **SYNC_FOLDERS** is true.
+
+   Defaults to `synced_folders.yml`
 
 So, in order to start, say, a Kubernetes cluster with 3 minion nodes, 4GB of RAM and 2 vCPUs per node one just would run:
 
