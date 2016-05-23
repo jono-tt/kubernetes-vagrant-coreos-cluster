@@ -462,6 +462,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             if mount['nfs']
               nfs = mount['nfs']
             end
+
+            #Fix source where its in the users HOME
+            mount["source"] = mount["source"].gsub(/^~\//, "#{ENV['HOME']}/")
+            puts "Mounting NFS from #{mount["source"]} to #{mount["destination"]}"
+
             if File.exist?(File.expand_path("#{mount['source']}"))
               if mount['destination']
                 kHost.vm.synced_folder "#{mount['source']}", "#{mount['destination']}",
